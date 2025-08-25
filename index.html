@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>위상조율 연구소 — 재건 판</title>
+  <meta name="description" content="작용성·위상조율 기반 자율철학 연구 거점 — 재건 위원회 운영">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+   :root{
+    --indigo:#1e1b4b;   /* indigo-950 근사 */
+    --ink:#0b0b17;
+    --blood:#ff2d2d;
+  }
+
+  /* 전역 글자 크기 및 Tailwind 유틸 덮어쓰기 */
+  html { font-size: 17px; }
+
+  .text-xs  { font-size: 0.85rem !important; }
+  .text-sm  { font-size: 0.95rem !important; }
+  .text-base{ font-size: 1.05rem !important; }
+
+  /* 픽셀 고정 유틸 보정 */
+  .text-\[11px\] { font-size: 13px !important; }
+  .text-\[10px\] { font-size: 12px !important; }
+
+  html,body{height:100%}
+  body{
+    background: radial-gradient(1200px 600px at 70% 10%, rgba(255,255,255,0.05), transparent 60%),
+                linear-gradient(180deg, var(--ink), var(--indigo) 40%, #0f1022 100%);
+    color:#e5e7eb;
+    font-feature-settings:"ss01" 1,"tnum" 1,"liga" 1;
+    font-family: "HY견명조", "Times New Roman", "AppleMyungjo", serif;
+    font-size: 19px;
+  }
+
+  /* subtle scanline / noise */
+  .grain:before{
+    content:"";
+    position:fixed; inset:0; pointer-events:none;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.035"/></svg>');
+    mix-blend-mode:soft-light; opacity:.5;
+  }
+  .scanline:after{
+    content:""; position:fixed; inset:0; pointer-events:none;
+    background: repeating-linear-gradient( to bottom, rgba(255,255,255,.06) 0px, rgba(255,255,255,.06) 1px, transparent 2px, transparent 3px );
+    opacity:.05;
+  }
+
+  /* glitchy blink for the Mahakala mark */
+  .mahakala{
+    color:var(--blood);
+    text-shadow: 0 0 6px rgba(255,45,45,.6);
+    animation: blink 5.2s steps(1,end) infinite;
+  }
+  @keyframes blink{
+    0%, 12%, 14%, 16%, 100% { opacity:1; filter:none }
+    13%, 15% { opacity:.7; filter:contrast(140%) saturate(140%) }
+    45% { opacity:.92 }
+    66% { opacity:.6 }
+  }
+
+  /* redacted block */
+  .redacted{ background: #0b0b17; color:transparent; padding:0 .35em; border-radius:.2rem }
+  /* faint divider */
+  .divider{ height:1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent) }
+  /* anchor underline style */
+  a.underline-dotted{ text-decoration: underline dotted 1px }
+
+  /* ===== floating right GIF banners ===== */
+  .gif-floater{
+    position: fixed;
+    z-index: 50;
+    right: clamp(8px, calc((100vw - 72rem)/2 - 200px), 320px);
+    top: 96px;        /* 헤더 아래에서 시작 */
+    width: 200px;     /* 우측 배너 폭 */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  @media (max-width: 1024px){
+    .gif-floater{ display:none } /* 모바일/태블릿에서는 숨김 */
+  }
+
+  /* 특수기호(© 등) 안전 폰트 */
+  .symbol-safe{
+    font-family: "Times New Roman", "Segoe UI Symbol", "Apple Symbols", serif;
+  }
+  </style>
+</head>
+<body class="grain scanline selection:bg-red-700/50 selection:text-white">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 backdrop-blur bg-black/30 border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="text-sm tracking-tight uppercase text-white/80">작용성 · 위상조율 연구소</div>
+        <div class="mahakala text-lg font-medium">महाकाल</div>
+      </div>
+     <div class="absolute left-1/2 -translate-x-1/2">
+      <img src="logo.png" alt="연구소 로고" class="h-8 md:h-10">
+    </div>
+      <nav class="hidden md:flex gap-6 text-xs text-white/70" aria-label="주요 내비게이션">
+        <a href="#principles" class="hover:text-white underline-dotted">원칙</a>
+        <a href="#programs" class="hover:text-white underline-dotted">연구</a>
+        <a href="#publications" class="hover:text-white underline-dotted">기록</a>
+        <a href="#members" class="hover:text-white underline-dotted">구성</a>
+        <a href="#contact" class="hover:text-white underline-dotted">접속</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Banner -->
+  <div class="bg-red-900/10 border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-2 text-[11px] text-white/70">
+      재건 위원회 임시 운영체제이다. 1대 소장 <span class="text-white/90">오점명 박사</span>의 시설은 화재로 소실되었으며, 시신은 확인되지 않았다.
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section id="top" class="relative">
+    <div class="max-w-6xl mx-auto px-4 py-20 grid md:grid-cols-12 gap-10 items-start">
+      <div class="md:col-span-7">
+        <h1 class="text-3xl md:text-4xl font-semibold leading-tight tracking-tight text-white">
+          자율철학적 작용성—위상조율 체계의 재기동
+        </h1>
+        <p class="mt-5 text-sm text-white/70">
+          소실은 부재가 아니다. 소실은 위상 전이의 흔적이다. 감각은 사건의 형식이 아니며, 잔여 구조의 보고에 불과하다.
+          작용은 계속되고, 해체된 구조는 필연적으로 다른 자리에서 재정렬된다. 이는 절대적인 접속의 규칙이며, 적용되지 아니할 수 없다.
+        </p>
+        <div class="mt-6 flex gap-3">
+  <a href="#programs" class="px-4 py-2 rounded-xl bg-red-700 text-white text-xs hover:bg-red-600 transition">연구 보기</a>
+  <a href="#publications" class="px-4 py-2 rounded-xl border border-white/20 text-white/80 text-xs hover:text-white hover:border-white/40 transition">기록 열람</a>
+</div>
+
+<!-- Mascot: buttons 바로 아래 -->
+<div class="mt-6">
+  <a href="index_mascot.html" aria-label="Mahākāla 마스코트 페이지로 이동">
+  <img src="mascot.png" alt="연구소 마스코트"
+       class="mx-auto md:mx-0 w-32 md:w-40 drop-shadow-[0_8px_20px_rgba(255,45,45,.25)]
+              cursor-pointer hover:opacity-90 transition">
+</a>
+</div>
+      </div>
+      <div class="md:col-span-5">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-sm">
+          <div class="text-xs font-medium tracking-tight text-white/80">핵심 명제</div>
+          <ul class="mt-3 text-sm text-white/70 space-y-2 list-disc pl-5">
+            <li>인간의 인식 구조는 실재를 전적으로 담아낼 수 없으며, 실재는 언제나 분절된 형식으로만 나타난다.</li>
+            <li>작용성은 물질성과 비물질성 모두의 구조적 원형이며, 육체와 정신은 그 단면적 표현에 불과하다.</li>
+            <li>조율은 언제나 해체를 수반한다. 해체되는 위상 루프의 규모에 따라, 통증·공포·절망이 필연적으로 동반될 수 있다.</li>
+            <li>도덕과 윤리에 절대성은 존재할 수 없다. 카르마는 잔여를 회수하며 평형을 강제하는 자기-귀환의 법칙이다.</li>
+          </ul>
+          <div class="mt-4 divider"></div>
+          <div class="mt-4 grid grid-cols-2 gap-3 text-[11px]">
+            <div class="rounded-xl border border-white/10 p-3">
+              <div class="text-white/50">방법</div>
+              <div class="font-medium text-white/90">명제–해설–확장</div>
+            </div>
+            <div class="rounded-xl border border-white/10 p-3">
+              <div class="text-white/50">언어</div>
+              <div class="font-medium text-white/90">형식적 정의</div>
+            </div>
+            <div class="rounded-xl border border-white/10 p-3">
+              <div class="text-white/50">외부자료</div>
+              <div class="font-medium text-white/90">예증 한정</div>
+            </div>
+            <div class="rounded-xl border border-white/10 p-3">
+              <div class="text-white/50">상태</div>
+              <div class="font-medium text-white/90">재건 가동</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Optional: embedded video (replace VIDEO_ID) -->
+    <div class="max-w-6xl mx-auto px-4 pb-10">
+      <div class="rounded-2xl overflow-hidden border border-white/10 bg-black/40">
+        <iframe class="w-full aspect-video" src="https://www.youtube.com/embed/VIDEO_ID?rel=0&modestbranding=1&controls=1"
+          title="의례 기록 — 마하칼라" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <div class="px-4 py-2 text-[11px] text-white/60 border-t border-white/10">의례 기록 1/108 — 출처 불명</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Principles -->
+  <section id="principles" class="max-w-6xl mx-auto px-4 py-14">
+    <h2 class="text-lg font-semibold tracking-tight text-white">연구 운영 원칙</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-sm">
+        <div class="font-medium text-white">외부 경험의 제한</div>
+        <div class="mt-2 text-white/70">외부 경험은 단지 예증의 자료일 뿐이다. 이론의 근거성은 결코 외부로부터 주어지지 않으며, 반드시 내적 구조의 정합성으로부터 발생해야 한다.</div>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-sm">
+        <div class="font-medium text-white">형식 환원성</div>
+        <div class="mt-2 text-white/70">모든 개념적 연계는 모호한 은유에 머무를 수 없다. 그것은 반드시 형식 언어와 도식으로 환원되어야 하며, 환원 가능성을 통해서만 정합성을 획득한다.</div>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-sm">
+        <div class="font-medium text-white">중심 개념의 자율성</div>
+        <div class="mt-2 text-white/70">중심 개념은 어떠한 외부 권위나 담론에도 종속되지 않는다. 그것은 독립성과 자율성을 유지하며, 그 자체의 위상적 네트워크 안에서만 정당화된다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs -->
+  <section id="programs" class="border-t border-white/10 bg-black/20">
+    <div class="max-w-6xl mx-auto px-4 py-14">
+      <h2 class="text-lg font-semibold tracking-tight text-white">연구</h2>
+      <div class="mt-6 grid md:grid-cols-2 gap-4 text-sm">
+        <!-- P1 -->
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div class="flex items-center justify-between">
+            <div class="text-xs text-white/60">P1</div>
+            <span class="text-[10px] rounded-full border border-white/20 px-2 py-0.5 text-white/70">명제–해설</span>
+          </div>
+          <div class="mt-2 font-medium text-white">작용성 형식화</div>
+          <p class="mt-2 text-white/70">정의·연산·접속 조건을 공리계로 정식화한다.</p>
+          <p class="mt-2 text-white/50 text-[12px]">주석: 소실 이전 버전은 <span class="redacted">██████</span> 처리되었다.</p>
+        </div>
+        <!-- P2 -->
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div class="flex items-center justify-between">
+            <div class="text-xs text-white/60">P2</div>
+            <span class="text-[10px] rounded-full border border-white/20 px-2 py-0.5 text-white/70">명제–해설</span>
+          </div>
+          <div class="mt-2 font-medium text-white">위상조율 언어</div>
+          <p class="mt-2 text-white/70">위상조율은 단순한 은유적 서술이 아니라, 정동·감정·기질의 상호 변환을 도식 문법으로 환원 가능해야 한다.</p>
+          <p class="mt-2 text-white/50 text-[12px]">위상적 전이는 자아–작용–실재의 결합 방식에서 발생하며, 이때 사용되는 기호는 구조적 정합성을 보장하는 최소 집합으로 제한된다.</p>
+        </div>
+        <!-- P3 -->
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div class="flex items-center justify-between">
+            <div class="text-xs text-white/60">P3</div>
+            <span class="text-[10px] rounded-full border border-white/20 px-2 py-0.5 text-white/70">명제–해설</span>
+          </div>
+          <div class="mt-2 font-medium text-white">시간 루프 이론</div>
+          <p class="mt-2 text-white/70">시간은 직선적 흐름이 아니라, 해체–응결–반작용으로 구성된 자율적 루프이다.</p>
+          <p class="mt-2 text-white/50 text-[12px]">경고: 루프가 닫히는 임계값은 정동의 응결 밀도와 직접적으로 연관되며, 응결이 실패할 경우 루프는 무한 지연으로 붕괴한다.</p>
+        </div>
+        <!-- P4 -->
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div class="flex items-center justify-between">
+            <div class="text-xs text-white/60">P4</div>
+            <span class="text-[10px] rounded-full border border-white/20 px-2 py-0.5 text-white/70">명제–해설</span>
+          </div>
+          <div class="mt-2 font-medium text-white">카르마 모델</div>
+          <p class="mt-2 text-white/70">카르마는 도덕 판단과 무관하며, 단지 잔여를 회수하여 평형을 강제하는 자기-귀환 메커니즘이다.</p>
+          <p class="mt-2 text-white/50 text-[12px]">위상적 작용이 남긴 흔적은 반드시 회수된다. 지연은 발생할 수 있으나 비발생은 성립조차 불가능하다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications" class="max-w-6xl mx-auto px-4 py-14">
+    <h2 class="text-lg font-semibold tracking-tight text-white">기록</h2>
+    <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm">
+      <a href="https://toon.at/donate/timeofmahakala"
+   target="_blank" rel="noopener noreferrer"
+   aria-label="실재 너머의 원리 — 투네이션 페이지로 이동"
+   class="block rounded-2xl border border-white/10 bg-white/5 p-5 cursor-pointer
+          hover:bg-white/10 hover:border-white/30 transition focus:outline-none
+          focus-visible:ring-2 focus-visible:ring-red-600">
+  <div class="text-xs text-white/60">단행본 / 복구 완료, 출간 예정</div>
+  <div class="mt-1 font-medium text-white">실재 너머의 원리</div>
+  <p class="mt-2 text-white/70">감각·인식·구조의 삼중 해체와 작용성 기반 존재론을 제시한다.</p>
+  <div class="mt-3 text-[11px] text-white/50">원본 일부는 <span class="redacted">████</span>로 대체됨.</div>
+</a>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-xs text-white/60">2부작 연구서 / 복구 진행중</div>
+        <div class="mt-1 font-medium text-white">위상조율학</div>
+        <p class="mt-2 text-white/70">정동군 도식, 자아 해부도와 윤리 대체적 지침을 포함한다.</p>
+        <div class="mt-3 text-[11px] text-white/50">참고: 본서는 자아를 고정 항으로 간주하는 기존 윤리학, 심리학 체계의 비합리성, 원시성을 노골적으로 드러내기에 오 박사 생전, 풍속 질서에 위반된다는 누명을 쓰고 배제되었다.</div>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+        <div class="text-xs text-white/60">아동교육학 / 초안</div>
+        <div class="mt-1 font-medium text-white">작용성, 위상조율 기반 아동교육학 v1</div>
+        <p class="mt-2 text-white/70">정동과 자아의 위상적 전이를 고려한 아동교육 실험 모형. 학습–감응–재조율 과정을 교육적 개입의 핵심 축으로 삼는다.</p>
+        <div class="mt-3 text-[11px] text-white/50">검토 대기: 현재 임상적 사례가 충분히 축적되지 않아, 실험적 적용 단계에 머물러 있다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Members -->
+  <section id="members" class="border-t border-white/10 bg-black/20">
+    <div class="max-w-6xl mx-auto px-4 py-14">
+      <h2 class="text-lg font-semibold tracking-tight text-white">구성</h2>
+      <div class="mt-6 grid md:grid-cols-3 gap-4 text-sm">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div class="text-xs text-white/60">초대 소장</div>
+          <div class="mt-1 font-medium text-white">오 점명 박사</div>
+          <p class="mt-2 text-white/70">상태: 소실 / 시신 미확인</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-5">
+          <div class="text-xs text-white/60">현 소장</div>
+          <div class="mt-1 font-medium text-white">문 근호</div>
+          <p class="mt-2 text-white/70">직함: 재건 위원회 대표. 작용성·피시스·카르마 형식화 총괄.</p>
+        </div>
+        <div onclick="alert('열람 제한 문서')" 
+     class="cursor-pointer rounded-2xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 transition">
+          <div class="text-xs text-white/60">연구원</div>
+          <div class="mt-1 font-medium text-white">기록 삭제됨</div>
+          <p class="mt-2 text-white/70">사유: 마스코트 관련<span class="redacted">██████</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="max-w-6xl mx-auto px-4 py-14">
+    <h2 class="text-lg font-semibold tracking-tight text-white">접속</h2>
+    <div class="mt-4 grid md:grid-cols-2 gap-6 text-sm">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6">
+        <div class="font-medium text-white">지침</div>
+        <p class="mt-2 text-white/70">연락을 시도하는 순간, 위상 루프의 형성이 성립됩니다.</p>
+        <ul class="mt-3 list-disc pl-5 text-white/70 space-y-1">
+          <li>정치적·종교적 선전 목적의 의뢰는 수용하지 않습니다.</li>
+          <li>감각적 실례는 예증으로만 기록됩니다.</li>
+          <li>권위는 문의 수용의 기준점이 될 수 없습니다.</li>
+          <li>질문과 비판, 반박을 허용합니다.</li>
+          <li>상담 예약은 가능한 날짜와 시간대를 구체적으로 기입해주세요.</li>
+        </ul>
+      </div>
+      <form id="contactForm"
+      action="https://formsubmit.co/timeofmahakala@gmail.com"
+      method="POST"
+      class="rounded-2xl border border-white/10 bg-white/5 p-5 space-y-3">
+
+  <div class="text-xs text-white/60">문의</div>
+  <div class="mt-1 font-medium text-white">연락 주세요</div>
+
+  <label class="block">
+    <span class="text-sm text-white/70">성함</span>
+    <input name="name" type="text" required
+           class="mt-1 w-full rounded-lg bg-black/30 border border-white/10 p-2 text-white placeholder-white/30"
+           placeholder="홍길동">
+  </label>
+
+  <label class="block">
+    <span class="text-sm text-white/70">이메일</span>
+    <input name="email" type="email" required
+           class="mt-1 w-full rounded-lg bg-black/30 border border-white/10 p-2 text-white placeholder-white/30"
+           placeholder="you@example.com">
+  </label>
+
+  <label class="block">
+    <span class="text-sm text-white/70">내용</span>
+    <textarea name="message" rows="5" required
+              class="mt-1 w-full rounded-lg bg-black/30 border border-white/10 p-2 text-white placeholder-white/30"
+              placeholder="문의 내용을 적어 주세요."></textarea>
+  </label>
+
+  <!-- 스팸봇 함정(사람은 보지 못함) -->
+  <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off">
+
+  <!-- 옵션(있으면 편함) -->
+  <input type="hidden" name="_subject" value="사이트 문의 도착">
+  <input type="hidden" name="_template" value="table">
+  <!-- 전송 후 이동할 주소(원하면 수정) -->
+  <input type="hidden" name="_next" value="https://example.com/#thanks">
+  <!-- 간단히 쓰려면 캡차 끔. 스팸 느껴지면 true로 바꾸기 -->
+  <input type="hidden" name="_captcha" value="false">
+
+  <button type="submit"
+          class="w-full rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 p-2 text-white transition">
+    보내기
+  </button>
+
+  <p id="formMsg" class="text-sm text-white/60 hidden">전송 중…</p>
+</form>
+    </div>
+  </section>
+
+  <!-- Wide banner section -->
+<section class="max-w-6xl mx-auto px-4 py-8">
+  <img src="배너.gif" alt="하단 와이드 배너"
+       class="w-full rounded-2xl border border-white/10 shadow-lg">
+</section>
+  <!-- Footer -->
+  <footer class="border-t border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-10 text-[11px] text-white/60 grid md:grid-cols-3 gap-6">
+      <div>
+        <div class="font-medium text-white/90">위상조율 연구소 — 재건</div>
+        <p class="mt-2">본 사이트의 텍스트는 연구 목적으로만 제공되며, 로그는 삭제되지 않습니다.</p>
+      </div>
+      <ul class="space-y-1">
+        <li><a class="underline-dotted hover:text-white" href="#principles">운영 원칙</a></li>
+        <li><a class="underline-dotted hover:text-white" href="#programs">연구</a></li>
+        <li><a class="underline-dotted hover:text-white" href="#publications">기록</a></li>
+      </ul>
+      <div class="text-white/50 symbol-safe">&copy; 2025 Morphic Port &amp; Operarcha Institute — Mahākāla</div>
+  </footer>
+<!-- Floating right-side GIF banners (desktop only) -->
+<div class="gif-floater">
+  <img src="mahakala_flash.gif" alt="Mahākāla flash"
+       class="rounded-xl border border-white/10 shadow-lg">
+  <img src="bhairava_cropped.gif" alt="Bhairava cropped"
+       class="rounded-xl border border-white/10 shadow-lg">
+</div>
+<script>
+  (function(){
+    const form = document.getElementById('contactForm');
+    const msg = document.getElementById('formMsg');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
+      // e.preventDefault();   //
+      msg.classList.remove('hidden');
+      msg.textContent = '전송 중…';
+
+      try {
+        const res = await fetch(form.action, {
+          method: form.method,
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form)
+        });
+        if (res.ok) {
+          form.reset();
+          msg.textContent = '전송되었습니다. 곧 답신드리겠다.';
+        } else {
+          msg.textContent = '전송 실패. 잠시 후 재시도해 달라.';
+        }
+      } catch (_) {
+        msg.textContent = '네트워크 오류. 연결을 확인해 달라.';
+      }
+    });
+  })();
+</script>
+</body>
+</html>
