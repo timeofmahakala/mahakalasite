@@ -323,9 +323,21 @@
         </ul>
       </div>
       <form id="contactForm"
-      action="https://formsubmit.co/timeofmahakala@gmail.com"
+      action="https://api.web3forms.com/submit"
       method="POST"
       class="rounded-2xl border border-white/10 bg-white/5 p-5 space-y-3">
+
+  <!-- ✅ 발급받은 Access Key 넣기 -->
+  <input type="hidden" name="access_key" value="c0214554-34c6-4a09-ada7-cadef58269c1">
+
+  <!-- 문의 제목(메일 제목) 고정 -->
+  <input type="hidden" name="subject" value="사이트 문의 도착">
+
+  <!-- 확인 후 이동할 URL (옵션) -->
+  <input type="hidden" name="redirect" value="https://timeofmahakala.github.io/mahakalasite/#thanks">
+
+  <!-- 스팸봇 방지용 -->
+  <input type="checkbox" name="botcheck" class="hidden" style="display:none;">
 
   <div class="text-xs text-white/60">문의</div>
   <div class="mt-1 font-medium text-white">연락 주세요</div>
@@ -350,17 +362,6 @@
               class="mt-1 w-full rounded-lg bg-black/30 border border-white/10 p-2 text-white placeholder-white/30"
               placeholder="문의 내용을 적어 주세요."></textarea>
   </label>
-
-  <!-- 스팸봇 함정(사람은 보지 못함) -->
-  <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off">
-
-  <!-- 옵션(있으면 편함) -->
-  <input type="hidden" name="_subject" value="사이트 문의 도착">
-  <input type="hidden" name="_template" value="table">
-  <!-- 전송 후 이동할 주소(원하면 수정) -->
-  <input type="hidden" name="_next" value="https://example.com/#thanks">
-  <!-- 간단히 쓰려면 캡차 끔. 스팸 느껴지면 true로 바꾸기 -->
-  <input type="hidden" name="_captcha" value="false">
 
   <button type="submit"
           class="w-full rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 p-2 text-white transition">
